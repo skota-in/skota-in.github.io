@@ -18,14 +18,26 @@ Topics covered in this blog include:
 - Learning experiences
 - Professional insights
 
+### Technology Categories
+
+#### Angular
+- [Integrating Angular with NgRx: Step-by-Step Guide](angular/posts/angular-ngrx-integration.md)
+
+#### RxJS
+- [RxJS Combination Operators: Examples and Use Cases](rxjs/posts/rxjs-combination-operators.md)
+- [RxJS Conditional Operators: Examples and Use Cases](rxjs/posts/rxjs-conditional-operators.md)
+- [RxJS Creation Operators: Examples and Use Cases](rxjs/posts/rxjs-creation-operators.md)
+- [RxJS Error Handling Operators: Examples and Use Cases](rxjs/posts/rxjs-error-handling-operators.md)
+
+#### Spring Boot
+- [Spring Boot REST API Best Practices](spring-boot/posts/spring-boot-rest-api-best-practices.md)
+- [Spring Boot Hystrix Integration](spring-boot/posts/spring-boot-hystrix-integration.md)
+- [Spring Boot Kafka Integration](spring-boot/posts/spring-boot-kafka-integration.md)
+- [Spring Boot Microservices Architecture](spring-boot/posts/spring-boot-microservices-architecture.md)
+- [Spring Boot MongoDB Integration](spring-boot/posts/spring-boot-mongodb-integration.md)
+- [Spring Boot Security with JWT](spring-boot/posts/spring-boot-security-jwt.md)
+- [Spring Boot Testing Strategies](spring-boot/posts/spring-boot-testing-strategies.md)
+
 ## Technology
 
 This blog is built using GitHub Pages, which allows for easy hosting directly from this GitHub repository.
-
-## Contributing
-
-While this is a personal blog, I welcome feedback and suggestions. Feel free to open an issue or submit a pull request if you have ideas for improvement.
-
-## Contact
-
-If you'd like to reach out, please [open an issue](https://github.com/skota-in/skota-in.github.io/issues) on this repository.
