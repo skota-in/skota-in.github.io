@@ -13,6 +13,12 @@ Welcome to the Angular section of the blog. Here you'll find comprehensive guide
 ### Performance
 - [Angular Performance Optimization: Techniques and Best Practices](./posts/angular-performance-optimization.md) - Discover strategies to improve your Angular application's performance, including change detection optimization, lazy loading, and server-side rendering.
 
+### Latest Features
+- [Angular 16 Features: A Comprehensive Guide with Examples](versions/angular-16-features.md) - Discover the key features of Angular 16, including signals (developer preview), non-destructive hydration, and required inputs.
+- [Angular 17 Features: A Comprehensive Guide with Examples](versions/angular-17-features.md) - Learn about the groundbreaking features of Angular 17, including built-in control flow, deferred loading, and view transitions.
+- [Angular 18 Features: A Comprehensive Guide with Examples](versions/angular-18-features.md) - Discover the key features of Angular 18 with practical examples, including zoneless change detection, function-based route redirects, and event replay.
+- [Angular 19 Features: A Comprehensive Guide with Examples](versions/angular-19-features.md) - Explore the key features of Angular 19 with practical examples, including incremental hydration, linked signals, and resource APIs.
+
 ## Why Angular?
 
 Angular is a platform and framework for building single-page client applications using HTML and TypeScript. It implements core and optional functionality as a set of TypeScript libraries that you import into your applications.

@@ -29,11 +29,15 @@ Welcome to my technical blog where I share insights, tutorials, and experiences 
     <h3>Angular</h3>
   </div>
   <div class="card-body">
-    <p>Guides and tutorials for Angular development, including state management, component communication, and performance optimization.</p>
+    <p>Guides and tutorials for Angular development, including state management, component communication, performance optimization, and the latest features.</p>
     <ul>
       <li><a href="angular/posts/angular-ngrx-integration.md">Integrating Angular with NgRx: Step-by-Step Guide</a></li>
       <li><a href="angular/posts/angular-component-communication.md">Angular Component Communication: Patterns and Best Practices</a></li>
       <li><a href="angular/posts/angular-performance-optimization.md">Angular Performance Optimization: Techniques and Best Practices</a></li>
+      <li><a href="angular/versions/angular-16-features.md">Angular 16 Features: A Comprehensive Guide with Examples</a></li>
+      <li><a href="angular/versions/angular-17-features.md">Angular 17 Features: A Comprehensive Guide with Examples</a></li>
+      <li><a href="angular/versions/angular-18-features.md">Angular 18 Features: A Comprehensive Guide with Examples</a></li>
+      <li><a href="angular/versions/angular-19-features.md">Angular 19 Features: A Comprehensive Guide with Examples</a></li>
     </ul>
   </div>
 </div>

@@ -24,6 +24,10 @@ Topics covered in this blog include:
 - [Integrating Angular with NgRx: Step-by-Step Guide](angular/posts/angular-ngrx-integration.md)
 - [Angular Component Communication: Patterns and Best Practices](angular/posts/angular-component-communication.md)
 - [Angular Performance Optimization: Techniques and Best Practices](angular/posts/angular-performance-optimization.md)
+- [Angular 16 Features: A Comprehensive Guide with Examples](angular/versions/angular-16-features.md)
+- [Angular 17 Features: A Comprehensive Guide with Examples](angular/versions/angular-17-features.md)
+- [Angular 18 Features: A Comprehensive Guide with Examples](angular/versions/angular-18-features.md)
+- [Angular 19 Features: A Comprehensive Guide with Examples](angular/versions/angular-19-features.md)
 
 #### RxJS
 - [RxJS Combination Operators: Examples and Use Cases](rxjs/posts/rxjs-combination-operators.md)
