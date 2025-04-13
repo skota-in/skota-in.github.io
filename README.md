@@ -22,12 +22,18 @@ Topics covered in this blog include:
 
 #### Angular
 - [Integrating Angular with NgRx: Step-by-Step Guide](angular/posts/angular-ngrx-integration.md)
+- [Angular Component Communication: Patterns and Best Practices](angular/posts/angular-component-communication.md)
+- [Angular Performance Optimization: Techniques and Best Practices](angular/posts/angular-performance-optimization.md)
 
 #### RxJS
 - [RxJS Combination Operators: Examples and Use Cases](rxjs/posts/rxjs-combination-operators.md)
 - [RxJS Conditional Operators: Examples and Use Cases](rxjs/posts/rxjs-conditional-operators.md)
 - [RxJS Creation Operators: Examples and Use Cases](rxjs/posts/rxjs-creation-operators.md)
 - [RxJS Error Handling Operators: Examples and Use Cases](rxjs/posts/rxjs-error-handling-operators.md)
+- [RxJS Filter Operators: Examples and Use Cases](rxjs/posts/rxjs-filter-operators.md)
+- [RxJS Multicasting Operators: Examples and Use Cases](rxjs/posts/rxjs-multicasting-operators.md)
+- [RxJS Transformation Operators: Examples and Use Cases](rxjs/posts/rxjs-transformation-operators.md)
+- [RxJS Utility Operators: Examples and Use Cases](rxjs/posts/rxjs-utility-operators.md)
 
 #### Spring Boot
 - [Spring Boot REST API Best Practices](spring-boot/posts/spring-boot-rest-api-best-practices.md)
