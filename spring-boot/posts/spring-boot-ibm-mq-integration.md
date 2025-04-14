@@ -1,5 +1,7 @@
 # Spring Boot IBM MQ Integration Guide
 
+*Published on February 20, 2024*
+
 ## Introduction
 
 IBM MQ is a robust messaging middleware that enables applications to exchange information reliably and securely. This guide will walk you through integrating IBM MQ with your Spring Boot application.

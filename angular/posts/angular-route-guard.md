@@ -1,5 +1,7 @@
 # Angular Route Guards: Protecting Your Routes
 
+*Published on February 10, 2024*
+
 Route guards in Angular are interfaces that control access to routes based on certain conditions. They are essential for implementing authentication, authorization, and other route protection mechanisms in your Angular applications.
 
 ## Types of Route Guards

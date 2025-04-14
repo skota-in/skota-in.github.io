@@ -1,5 +1,7 @@
 # Deploying Angular Application to Vercel
 
+*Published on February 8, 2024*
+
 This guide will walk you through the process of deploying an Angular application to Vercel.
 
 ## Prerequisites

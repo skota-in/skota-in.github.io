@@ -1,5 +1,7 @@
 # My Technical Blog
 
+*Published on January 1, 2024*
+
 Welcome to my technical blog where I share insights, tutorials, and experiences from my journey in software development.
 
 ## Technology Categories

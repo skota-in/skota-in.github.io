@@ -1,5 +1,7 @@
 # Docker Containerization Resources
 
+*Published on January 30, 2024*
+
 Welcome to the Docker section of the blog. Here you'll find comprehensive guides, tutorials, and best practices for containerizing applications with Docker.
 
 ## Featured Posts

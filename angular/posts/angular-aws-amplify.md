@@ -1,5 +1,7 @@
 # Deploying Angular Application to AWS Amplify
 
+*Published on February 5, 2024*
+
 This guide will walk you through the process of deploying an Angular application to AWS Amplify.
 
 ## Prerequisites

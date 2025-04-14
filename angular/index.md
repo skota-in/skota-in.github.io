@@ -1,5 +1,7 @@
 # Angular Development Resources
 
+*Published on January 15, 2024*
+
 Welcome to the Angular section of the blog. Here you'll find comprehensive guides, tutorials, and best practices for Angular development.
 
 ## Featured Posts

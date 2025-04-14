@@ -1,6 +1,6 @@
 # Running Redis with Docker: A Step-by-Step Guide
 
-*Published on August 20, 2023*
+*Published on March 20, 2024*
 
 ## Introduction
 

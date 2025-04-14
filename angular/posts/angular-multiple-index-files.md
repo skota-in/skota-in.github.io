@@ -1,5 +1,7 @@
 # Using Multiple index.html Files in Angular for Different Environments
 
+*Published on February 12, 2024*
+
 When working with Angular applications, you might need different `index.html` files for development, testing, and production environments. This guide will show you how to set this up effectively.
 
 ## Why Use Multiple index.html Files?

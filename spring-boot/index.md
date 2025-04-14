@@ -1,5 +1,7 @@
 # Spring Boot Development Resources
 
+*Published on January 25, 2024*
+
 Welcome to the Spring Boot section of the blog. Here you'll find comprehensive guides, tutorials, and best practices for Spring Boot development.
 
 ## Featured Posts

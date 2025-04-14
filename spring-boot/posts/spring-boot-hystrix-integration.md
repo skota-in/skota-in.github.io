@@ -1,4 +1,6 @@
-# Spring Boot with Netflix Hystrix Circuit Breaker
+# Spring Boot Hystrix Integration Guide
+
+*Published on March 10, 2024*
 
 ## Overview
 

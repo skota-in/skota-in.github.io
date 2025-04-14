@@ -1,5 +1,7 @@
 # skota-in.github.io
 
+*Published on January 1, 2024*
+
 A personal blog to share my experiences and insights.
 
 ## About

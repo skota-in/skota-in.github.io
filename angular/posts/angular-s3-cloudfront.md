@@ -1,5 +1,7 @@
 # Deploying Angular Application to S3 and CloudFront
 
+*Published on February 15, 2024*
+
 This guide will walk you through the process of deploying an Angular application to Amazon S3 and configuring CloudFront for content delivery.
 
 ## Prerequisites

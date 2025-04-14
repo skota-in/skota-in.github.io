@@ -1,5 +1,7 @@
 # RxJS Learning Resources
 
+*Published on January 20, 2024*
+
 Welcome to the RxJS section of the blog. Here you'll find detailed explanations, examples, and practical use cases for various RxJS operators.
 
 ## Operator Categories
