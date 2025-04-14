@@ -10,6 +10,9 @@ Welcome to the Angular section of the blog. Here you'll find comprehensive guide
 ### Component Architecture
 - [Angular Component Communication: Patterns and Best Practices](./posts/angular-component-communication.md) - Explore various techniques for communication between components, from @Input/@Output decorators to services with RxJS and NgRx.
 
+### Routing and Navigation
+- [Angular Route Resolvers: A Comprehensive Guide](./posts/angular-route-resolvers.md) - Learn how to pre-fetch data before activating routes, handle errors, and implement advanced patterns with Angular Route Resolvers.
+
 ### Performance
 - [Angular Performance Optimization: Techniques and Best Practices](./posts/angular-performance-optimization.md) - Discover strategies to improve your Angular application's performance, including change detection optimization, lazy loading, and server-side rendering.
 
