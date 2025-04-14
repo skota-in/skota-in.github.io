@@ -1,8 +1,36 @@
 # Spring Boot Annotations: A Comprehensive Guide
 
-*Published on November 25, 2024*
+*Published on January 18, 2024*
 
-Spring Boot provides a rich set of annotations that help in configuring and managing Spring applications. This guide covers the most commonly used annotations in Spring Boot.
+## Overview
+
+This guide provides a comprehensive overview of Spring Boot annotations, which are a fundamental part of Spring Boot development. Annotations in Spring Boot provide a powerful way to configure and manage Spring applications, reducing the need for XML configuration and making the code more readable and maintainable. This guide covers essential annotations across different aspects of Spring Boot development, from core configuration to security and testing.
+
+## Table of Contents
+
+1. [What are Spring Boot Annotations?](#what-are-spring-boot-annotations)
+2. [Core Spring Boot Annotations](#core-spring-boot-annotations)
+3. [Spring MVC Annotations](#spring-mvc-annotations)
+4. [Dependency Injection Annotations](#dependency-injection-annotations)
+5. [Configuration Annotations](#configuration-annotations)
+6. [Database Annotations](#database-annotations)
+7. [Security Annotations](#security-annotations)
+8. [Testing Annotations](#testing-annotations)
+9. [Scheduling Annotations](#scheduling-annotations)
+10. [Best Practices](#best-practices)
+11. [References](#references)
+
+## What are Spring Boot Annotations?
+
+Spring Boot annotations are metadata that provide information about the program to the compiler and runtime environment. They serve several important purposes:
+
+- Configuration management
+- Dependency injection
+- Request mapping
+- Security configuration
+- Database operations
+- Testing setup
+- Scheduling tasks
 
 ## Core Spring Boot Annotations
 
@@ -248,66 +276,53 @@ Marks a method to be scheduled.
 @Component
 public class ScheduledTasks {
     @Scheduled(fixedRate = 5000)
-    public void reportCurrentTime() {
+    public void performTask() {
         // implementation
     }
 }
 ```
 
-## Caching Annotations
+## Best Practices
 
-### @EnableCaching
-Enables Spring's caching capability.
+1. **Use appropriate annotations for each layer**:
+   - @Controller for web layer
+   - @Service for business logic
+   - @Repository for data access
+   - @Component for general components
 
-```java
-@Configuration
-@EnableCaching
-public class CacheConfig {
-    // implementation
-}
-```
+2. **Minimize the use of @Autowired**:
+   - Prefer constructor injection
+   - Use @RequiredArgsConstructor for cleaner code
 
-### @Cacheable
-Marks a method as cacheable.
+3. **Organize annotations logically**:
+   - Group related annotations together
+   - Use consistent ordering
+   - Document complex configurations
 
-```java
-@Service
-public class UserService {
-    @Cacheable("users")
-    public User getUser(Long id) {
-        // implementation
-    }
-}
-```
+4. **Use specialized annotations when available**:
+   - @RestController instead of @Controller + @ResponseBody
+   - @Service instead of @Component for services
+   - @Repository instead of @Component for DAOs
 
-## Validation Annotations
+5. **Keep configuration separate**:
+   - Use @Configuration classes for bean definitions
+   - Keep properties in application.properties/yml
+   - Use @Value for property injection
 
-### @Valid
-Marks a property, method parameter, or method return type for validation.
+6. **Document complex annotations**:
+   - Add comments for non-obvious configurations
+   - Explain the purpose of custom annotations
+   - Document dependencies between annotated components
 
-```java
-@RestController
-public class UserController {
-    @PostMapping("/users")
-    public User createUser(@Valid @RequestBody User user) {
-        // implementation
-    }
-}
-```
+7. **Test annotated components**:
+   - Write unit tests for each component
+   - Use @Test for test methods
+   - Leverage @SpringBootTest for integration tests
 
-### @Validated
-Marks a class for validation.
+## References
 
-```java
-@Service
-@Validated
-public class UserService {
-    public void validateUser(@Valid User user) {
-        // implementation
-    }
-}
-```
-
-## Conclusion
-
-These annotations form the foundation of Spring Boot development. Understanding and using them effectively can help you build robust and maintainable Spring Boot applications. Remember that this is not an exhaustive list, and Spring Boot provides many more annotations for specific use cases.
+- [Spring Boot Documentation](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/)
+- [Spring Framework Documentation](https://docs.spring.io/spring-framework/docs/current/reference/html/)
+- [Spring Boot Annotations Guide](https://www.baeldung.com/spring-boot-annotations)
+- [Spring MVC Annotations](https://www.baeldung.com/spring-mvc-annotations)
+- [Spring Security Annotations](https://www.baeldung.com/spring-security-annotations)

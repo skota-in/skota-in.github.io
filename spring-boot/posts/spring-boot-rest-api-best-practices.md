@@ -1,87 +1,137 @@
-# Spring Boot REST API Best Practices
+# Spring Boot REST API Best Practices Guide
 
-*Published on April 10, 2023*
+*Published on March 15, 2024*
 
-## Introduction
+## Overview
 
-Building robust and maintainable REST APIs is crucial for modern application development. Spring Boot provides an excellent framework for creating RESTful services, but following best practices ensures your APIs are secure, performant, and developer-friendly.
+This guide provides comprehensive best practices for building robust, secure, and maintainable REST APIs using Spring Boot. It covers everything from API design principles to implementation details, security considerations, and performance optimization. Whether you're building a new API or improving an existing one, these practices will help you create high-quality, production-ready REST services.
 
 ## Table of Contents
 
-1. [API Design Principles](#api-design-principles)
-2. [Request/Response Structure](#requestresponse-structure)
-3. [Error Handling](#error-handling)
-4. [Versioning Strategies](#versioning-strategies)
-5. [Security Best Practices](#security-best-practices)
-6. [Documentation](#documentation)
-7. [Performance Optimization](#performance-optimization)
-8. [Testing](#testing)
+1. [What is REST?](#what-is-rest)
+2. [API Design Principles](#api-design-principles)
+3. [Request/Response Structure](#requestresponse-structure)
+4. [Error Handling](#error-handling)
+5. [Versioning Strategies](#versioning-strategies)
+6. [Security Best Practices](#security-best-practices)
+7. [Documentation](#documentation)
+8. [Performance Optimization](#performance-optimization)
+9. [Testing](#testing)
+10. [Best Practices](#best-practices)
+11. [References](#references)
+
+## What is REST?
+
+REST (Representational State Transfer) is an architectural style for designing networked applications. It uses:
+
+- Stateless communication
+- Standard HTTP methods
+- Resource-based URLs
+- JSON/XML data formats
+- Cacheable responses
+
+### Key Principles:
+- Client-server architecture
+- Statelessness
+- Cacheability
+- Layered system
+- Uniform interface
+- Code on demand (optional)
+
+### Common Use Cases:
+- Web services
+- Mobile applications
+- Microservices
+- Public APIs
+- Internal services
+- Integration points
 
 ## API Design Principles
 
-### Use Nouns, Not Verbs in Endpoints
-
-```
-✅ Good: /api/users
-❌ Bad: /api/getUsers
-```
-
-### Use HTTP Methods Appropriately
-
-- `GET`: Retrieve resources
-- `POST`: Create resources
-- `PUT`: Update resources (full update)
-- `PATCH`: Partial update of resources
-- `DELETE`: Remove resources
-
-### Use Proper HTTP Status Codes
-
-- `200 OK`: Successful request
-- `201 Created`: Resource created successfully
-- `204 No Content`: Successful request with no response body
-- `400 Bad Request`: Invalid request
-- `401 Unauthorized`: Authentication required
-- `403 Forbidden`: Authenticated but not authorized
-- `404 Not Found`: Resource not found
-- `500 Internal Server Error`: Server-side error
-
-### Implement Pagination for Collections
-
+### 1. Resource Naming
 ```java
-@GetMapping("/users")
-public Page<User> getUsers(
-    @RequestParam(defaultValue = "0") int page,
-    @RequestParam(defaultValue = "10") int size,
-    @RequestParam(defaultValue = "id") String sortBy
-) {
-    Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
-    return userRepository.findAll(pageable);
+// Good examples
+@GetMapping("/api/users")
+@GetMapping("/api/users/{id}/orders")
+@GetMapping("/api/products/{id}/reviews")
+
+// Bad examples
+@GetMapping("/api/getUsers")
+@GetMapping("/api/fetchOrders")
+@GetMapping("/api/retrieveReviews")
+```
+
+### 2. HTTP Methods Usage
+```java
+@RestController
+@RequestMapping("/api/users")
+public class UserController {
+    
+    @GetMapping
+    public List<User> getUsers() {
+        // Retrieve all users
+    }
+    
+    @PostMapping
+    public User createUser(@RequestBody User user) {
+        // Create new user
+    }
+    
+    @PutMapping("/{id}")
+    public User updateUser(@PathVariable Long id, @RequestBody User user) {
+        // Update existing user
+    }
+    
+    @PatchMapping("/{id}")
+    public User partialUpdateUser(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+        // Partial update
+    }
+    
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable Long id) {
+        // Delete user
+    }
+}
+```
+
+### 3. Status Codes
+```java
+@RestController
+public class UserController {
+    
+    @PostMapping("/users")
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        User savedUser = userService.createUser(user);
+        return ResponseEntity
+            .created(URI.create("/api/users/" + savedUser.getId()))
+            .body(savedUser);
+    }
+    
+    @GetMapping("/users/{id}")
+    public ResponseEntity<User> getUser(@PathVariable Long id) {
+        return userService.findById(id)
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
+    }
 }
 ```
 
 ## Request/Response Structure
 
-### Use DTOs (Data Transfer Objects)
-
+### 1. DTOs and Validation
 ```java
+@Data
 public class UserDTO {
     private Long id;
     private String username;
     private String email;
-    // Getters and setters
-}
-```
-
-### Implement Request Validation
-
-```java
-@PostMapping("/users")
-public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserCreateRequest request) {
-    // Implementation
+    private LocalDateTime createdAt;
 }
 
+@Data
 public class UserCreateRequest {
     @NotBlank(message = "Username is required")
+    @Size(min = 3, max = 50)
     private String username;
     
     @Email(message = "Email should be valid")
@@ -90,27 +140,55 @@ public class UserCreateRequest {
     
     @Size(min = 8, message = "Password must be at least 8 characters")
     private String password;
+}
+
+@RestController
+@RequestMapping("/api/users")
+public class UserController {
     
-    // Getters and setters
+    @PostMapping
+    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserCreateRequest request) {
+        UserDTO user = userService.createUser(request);
+        return ResponseEntity.created(URI.create("/api/users/" + user.getId()))
+            .body(user);
+    }
+}
+```
+
+### 2. Pagination and Sorting
+```java
+@GetMapping
+public Page<UserDTO> getUsers(
+    @RequestParam(defaultValue = "0") int page,
+    @RequestParam(defaultValue = "10") int size,
+    @RequestParam(defaultValue = "id") String sortBy,
+    @RequestParam(defaultValue = "asc") String direction
+) {
+    Sort.Direction sortDirection = Sort.Direction.fromString(direction);
+    Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
+    return userService.findAll(pageable);
 }
 ```
 
 ## Error Handling
 
-### Create a Global Exception Handler
-
+### 1. Global Exception Handler
 ```java
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
+    private final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+    
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException ex) {
-        ErrorResponse error = new ErrorResponse("NOT_FOUND", ex.getMessage());
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    public ResponseEntity<ErrorResponse> handleResourceNotFoundException(
+        ResourceNotFoundException ex) {
+        logger.error("Resource not found", ex);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body(new ErrorResponse("NOT_FOUND", ex.getMessage()));
     }
     
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ErrorResponse> handleValidationExceptions(
+        MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
@@ -118,40 +196,57 @@ public class GlobalExceptionHandler {
             errors.put(fieldName, errorMessage);
         });
         
-        ErrorResponse error = new ErrorResponse("VALIDATION_FAILED", "Validation failed", errors);
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(new ErrorResponse("VALIDATION_FAILED", "Validation failed", errors));
     }
-    
-    // Other exception handlers
 }
 ```
 
-### Create Custom Exceptions
-
+### 2. Custom Exceptions
 ```java
 public class ResourceNotFoundException extends RuntimeException {
     public ResourceNotFoundException(String message) {
         super(message);
     }
 }
+
+public class BusinessException extends RuntimeException {
+    private final String errorCode;
+    
+    public BusinessException(String errorCode, String message) {
+        super(message);
+        this.errorCode = errorCode;
+    }
+    
+    public String getErrorCode() {
+        return errorCode;
+    }
+}
 ```
 
 ## Versioning Strategies
 
-### URI Versioning
+### 1. URI Versioning
+```java
+@RestController
+@RequestMapping("/api/v1/users")
+public class UserControllerV1 {
+    // V1 implementation
+}
 
+@RestController
+@RequestMapping("/api/v2/users")
+public class UserControllerV2 {
+    // V2 implementation
+}
 ```
-/api/v1/users
-/api/v2/users
-```
 
-### Header Versioning
-
+### 2. Header Versioning
 ```java
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
-
+    
     @GetMapping(headers = "API-Version=1")
     public List<UserV1DTO> getUsersV1() {
         // V1 implementation
@@ -166,69 +261,50 @@ public class UserController {
 
 ## Security Best Practices
 
-### Use HTTPS
-
-Configure your application to use HTTPS in production:
-
-```properties
-server.ssl.key-store=classpath:keystore.p12
-server.ssl.key-store-password=your-password
-server.ssl.key-store-type=PKCS12
-server.ssl.key-alias=tomcat
-server.port=8443
+### 1. HTTPS Configuration
+```yaml
+server:
+  ssl:
+    key-store: classpath:keystore.p12
+    key-store-password: ${KEYSTORE_PASSWORD}
+    key-store-type: PKCS12
+    key-alias: tomcat
+  port: 8443
 ```
 
-### Implement Rate Limiting
-
-Use libraries like Bucket4j or Spring Cloud Gateway for rate limiting:
-
+### 2. Rate Limiting
 ```java
 @Configuration
 public class RateLimitingConfig {
     
     @Bean
     public Bucket createBucket() {
-        long capacity = 20;
-        long refillTokens = 20;
-        Duration refillDuration = Duration.ofMinutes(1);
-        
-        RefillStrategy refillStrategy = Refill.intervally(refillTokens, refillDuration);
-        Bandwidth bandwidth = Bandwidth.classic(capacity, refillStrategy);
-        
         return Bucket.builder()
-                .addLimit(bandwidth)
-                .build();
+            .addLimit(Bandwidth.classic(20, Refill.intervally(20, Duration.ofMinutes(1))))
+            .build();
     }
 }
-```
 
-### Input Validation
-
-Always validate user input to prevent injection attacks:
-
-```java
-@PostMapping("/search")
-public List<Product> searchProducts(@RequestParam @Pattern(regexp = "^[a-zA-Z0-9 ]+$") String query) {
-    return productService.search(query);
+@RestController
+@RequestMapping("/api")
+public class ApiController {
+    
+    private final Bucket bucket;
+    
+    @PostMapping("/search")
+    public ResponseEntity<?> search(@RequestBody SearchRequest request) {
+        if (bucket.tryConsume(1)) {
+            return ResponseEntity.ok(searchService.search(request));
+        }
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+            .body(new ErrorResponse("RATE_LIMIT_EXCEEDED", "Rate limit exceeded"));
+    }
 }
 ```
 
 ## Documentation
 
-### Use Springdoc OpenAPI (formerly Swagger)
-
-Add the dependency:
-
-```xml
-<dependency>
-    <groupId>org.springdoc</groupId>
-    <artifactId>springdoc-openapi-ui</artifactId>
-    <version>1.6.9</version>
-</dependency>
-```
-
-Configure OpenAPI:
-
+### 1. OpenAPI Configuration
 ```java
 @Configuration
 public class OpenApiConfig {
@@ -236,162 +312,163 @@ public class OpenApiConfig {
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
-                .info(new Info()
-                        .title("My API")
-                        .version("1.0")
-                        .description("API Documentation")
-                        .contact(new Contact()
-                                .name("API Support")
-                                .email("support@example.com")));
+            .info(new Info()
+                .title("My API")
+                .version("1.0")
+                .description("API Documentation")
+                .contact(new Contact()
+                    .name("API Support")
+                    .email("support@example.com")))
+            .components(new Components()
+                .addSecuritySchemes("bearerAuth", 
+                    new SecurityScheme()
+                        .type(SecurityScheme.Type.HTTP)
+                        .scheme("bearer")
+                        .bearerFormat("JWT")));
     }
 }
 ```
 
-Document your endpoints:
-
+### 2. API Documentation
 ```java
-@Operation(summary = "Get user by ID", description = "Returns a user based on ID")
-@ApiResponses(value = {
-    @ApiResponse(responseCode = "200", description = "User found"),
-    @ApiResponse(responseCode = "404", description = "User not found")
-})
-@GetMapping("/users/{id}")
-public ResponseEntity<UserDTO> getUserById(
-    @Parameter(description = "User ID") @PathVariable Long id
-) {
-    // Implementation
+@RestController
+@RequestMapping("/api/users")
+public class UserController {
+    
+    @Operation(summary = "Get all users", description = "Retrieves a paginated list of users")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Successfully retrieved users"),
+        @ApiResponse(responseCode = "401", description = "Unauthorized"),
+        @ApiResponse(responseCode = "403", description = "Forbidden")
+    })
+    @GetMapping
+    public Page<UserDTO> getUsers(Pageable pageable) {
+        return userService.findAll(pageable);
+    }
 }
 ```
 
 ## Performance Optimization
 
-### Use Caching
-
+### 1. Caching
 ```java
 @Configuration
 @EnableCaching
-public class CachingConfig {
+public class CacheConfig {
     
     @Bean
     public CacheManager cacheManager() {
-        SimpleCacheManager cacheManager = new SimpleCacheManager();
-        cacheManager.setCaches(Arrays.asList(
-            new ConcurrentMapCache("users"),
-            new ConcurrentMapCache("products")
-        ));
-        return cacheManager;
+        return new ConcurrentMapCacheManager("users", "products");
     }
 }
 
 @Service
 public class UserService {
     
-    @Cacheable("users")
-    public UserDTO getUserById(Long id) {
-        // Implementation
-    }
-    
-    @CacheEvict(value = "users", key = "#user.id")
-    public void updateUser(UserDTO user) {
+    @Cacheable(value = "users", key = "#id")
+    public UserDTO findById(Long id) {
         // Implementation
     }
 }
 ```
 
-### Use Asynchronous Processing for Long-Running Tasks
-
-```java
-@Service
-public class ReportService {
-    
-    @Async
-    public CompletableFuture<Report> generateReport(ReportRequest request) {
-        // Long-running task
-        Report report = // generate report
-        return CompletableFuture.completedFuture(report);
-    }
-}
+### 2. Compression
+```yaml
+server:
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
+    min-response-size: 1024
 ```
 
 ## Testing
 
-### Unit Testing Controllers
-
+### 1. Unit Tests
 ```java
-@WebMvcTest(UserController.class)
-public class UserControllerTest {
+@ExtendWith(MockitoExtension.class)
+class UserServiceTest {
     
-    @Autowired
-    private MockMvc mockMvc;
+    @Mock
+    private UserRepository userRepository;
     
-    @MockBean
+    @InjectMocks
     private UserService userService;
     
     @Test
-    public void testGetUserById() throws Exception {
-        UserDTO user = new UserDTO();
-        user.setId(1L);
-        user.setUsername("testuser");
+    void testCreateUser() {
+        UserCreateRequest request = new UserCreateRequest();
+        request.setUsername("testuser");
+        request.setEmail("test@example.com");
         
-        when(userService.getUserById(1L)).thenReturn(user);
+        when(userRepository.save(any(User.class)))
+            .thenReturn(new User(1L, "testuser", "test@example.com"));
         
-        mockMvc.perform(get("/api/users/1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.username").value("testuser"));
+        UserDTO result = userService.createUser(request);
+        
+        assertNotNull(result);
+        assertEquals("testuser", result.getUsername());
     }
 }
 ```
 
-### Integration Testing
-
+### 2. Integration Tests
 ```java
 @SpringBootTest
 @AutoConfigureMockMvc
-public class UserApiIntegrationTest {
+class UserControllerTest {
     
     @Autowired
     private MockMvc mockMvc;
     
-    @Autowired
-    private UserRepository userRepository;
-    
-    @BeforeEach
-    public void setup() {
-        userRepository.deleteAll();
-        // Setup test data
-    }
-    
     @Test
-    public void testCreateAndGetUser() throws Exception {
-        // Test creating a user
-        String userJson = "{\"username\":\"newuser\",\"email\":\"user@example.com\",\"password\":\"password123\"}";
+    void testCreateUser() throws Exception {
+        UserCreateRequest request = new UserCreateRequest();
+        request.setUsername("testuser");
+        request.setEmail("test@example.com");
         
-        MvcResult result = mockMvc.perform(post("/api/users")
+        mockMvc.perform(post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(userJson))
-                .andExpect(status().isCreated())
-                .andReturn();
-        
-        String response = result.getResponse().getContentAsString();
-        Long userId = JsonPath.parse(response).read("$.id", Long.class);
-        
-        // Test getting the created user
-        mockMvc.perform(get("/api/users/" + userId))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.username").value("newuser"))
-                .andExpect(jsonPath("$.email").value("user@example.com"));
+                .content(asJsonString(request)))
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.username").value("testuser"));
     }
 }
 ```
 
-## Conclusion
+## Best Practices
 
-Following these best practices will help you build robust, secure, and maintainable REST APIs with Spring Boot. Remember that the specific implementation details may vary based on your project requirements, but these principles provide a solid foundation for any RESTful service.
+1. **API Design**:
+   - Use nouns for resource names
+   - Follow REST principles
+   - Implement proper versioning
+   - Use appropriate HTTP methods
+   - Return proper status codes
+
+2. **Security**:
+   - Use HTTPS in production
+   - Implement authentication
+   - Validate all inputs
+   - Use rate limiting
+   - Implement proper authorization
+
+3. **Performance**:
+   - Implement caching
+   - Use compression
+   - Optimize database queries
+   - Implement pagination
+   - Monitor performance
+
+4. **Maintenance**:
+   - Document your API
+   - Write comprehensive tests
+   - Follow coding standards
+   - Implement proper logging
+   - Monitor API usage
 
 ## References
 
 - [Spring Boot Documentation](https://docs.spring.io/spring-boot/docs/current/reference/html/)
-- [Spring REST Documentation](https://docs.spring.io/spring-framework/docs/current/reference/html/web.html)
-- [REST API Design Best Practices](https://restfulapi.net/)
-- [OWASP API Security Top 10](https://owasp.org/www-project-api-security/)
+- [REST API Design Best Practices](https://www.mulesoft.com/resources/api/rest-api-design-best-practices)
+- [OpenAPI Specification](https://swagger.io/specification/)
+- [Spring Security Documentation](https://docs.spring.io/spring-security/reference/)
+- [Spring Testing Documentation](https://docs.spring.io/spring-framework/docs/current/reference/html/testing.html)
