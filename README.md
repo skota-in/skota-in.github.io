@@ -27,6 +27,7 @@ Topics covered in this blog include:
 - [Angular Component Communication: Patterns and Best Practices](angular/posts/angular-component-communication.md)
 - [Angular Performance Optimization: Techniques and Best Practices](angular/posts/angular-performance-optimization.md)
 - [Angular Route Resolvers: A Comprehensive Guide](angular/posts/angular-route-resolvers.md)
+- [Angular Firebase Authentication: Complete Guide with Router Guards](angular/posts/angular-firebase-auth.md)
 - [Angular 16 Features: A Comprehensive Guide with Examples](angular/versions/angular-16-features.md)
 - [Angular 17 Features: A Comprehensive Guide with Examples](angular/versions/angular-17-features.md)
 - [Angular 18 Features: A Comprehensive Guide with Examples](angular/versions/angular-18-features.md)
